@@ -6,6 +6,9 @@ import 'package:myapp/HistoryPage.dart'; // Import HistoryPage
 import 'package:myapp/ConfigurationPage.dart'; // Import ConfigurationPage
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:3475475429.
 import 'package:myapp/ChatBotPage.dart'; // Import ChatBotPage
+import 'package:myapp/WeatherApp.dart';
+import 'package:myapp/map.dart';
+import 'package:myapp/IrrigationCalculatorApp.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +38,10 @@ class _FarmFarAwayAppState extends State<FarmFarAwayApp> {
         '/configuration': (context) =>
             ConfigurationPage(), // Add route for ConfigurationPage
         '/chatbot': (context) => ChatBotPage(),
+        '/weather': (context) => WeatherApp(),
+        '/map': (context) => FarmMapPage(),
+        '/calculator': (context) =>
+          IrrigationCalculatorApp(), // Add route for WeatherPage'
       },
     );
   }
@@ -62,14 +69,14 @@ class _FarmFarAwayAppState extends State<FarmFarAwayApp> {
   ThemeData get _darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
-      primarySwatch: Colors.green,
+      //primarySwatch: Color.fromARGB(255, 100, 135, 101),
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(149, 0, 0, 0),
         titleTextStyle: TextStyle(color: Colors.white),
       ),
-      scaffoldBackgroundColor: Colors.black,
-      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
-          .copyWith(secondary: Colors.orange),
+      scaffoldBackgroundColor: Color.fromARGB(255, 102, 134, 96),
+      //colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
+      //.copyWith(secondary: Colors.orange),
     );
   }
 }
@@ -137,6 +144,16 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.sunny),
+              title: Text('Weather'),
+              onTap: () => Navigator.pushNamed(context, '/weather'),
+            ),
+            ListTile(
+              leading: Icon(Icons.map),
+              title: Text('Map'),
+              onTap: () => Navigator.pushNamed(context, '/map'),
+            ),
+            ListTile(
               leading: Icon(Icons.settings),
               title: Text('Configuration'),
               onTap: () => Navigator.pushNamed(
@@ -152,6 +169,11 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.chat),
               title: Text('ChatBot'),
               onTap: () => Navigator.pushNamed(context, '/chatbot'),
+            ),
+            ListTile(
+              leading: Icon(Icons.water_drop_rounded),
+              title: Text('Irrig Calculator'),
+              onTap: () => Navigator.pushNamed(context, '/calculator'),
             ),
             ListTile(
               leading: Icon(Icons.build),
@@ -249,7 +271,9 @@ class _HomePageState extends State<HomePage> {
               ),
               Positioned.fill(
                 child: FractionallySizedBox(
-                  heightFactor: value / 100,
+                  heightFactor: (value > 0
+                      ? value / 100
+                      : 0.01), // Ensure heightFactor is never 0
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     decoration: BoxDecoration(
